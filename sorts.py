@@ -63,6 +63,6 @@ def selection_sort(array: list[int]) -> list[int]:
         # Swap the minimum element with the first 
         # unsorted element to effectively sort the minimum value
         if min_index != i:
-            array[i], array[min_index] = array[min], array[i]
+            array[i], array[min_index] = array[min_index], array[i]
 
     return array
