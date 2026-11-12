@@ -1,8 +1,8 @@
 from collections.abc import Callable
-from sorts import bubble_sort
+from sorts import bubble_sort, insertion_sort
 import pytest
 
-SORTING_ALGORITHMS = [bubble_sort]
+SORTING_ALGORITHMS = [bubble_sort, insertion_sort]
 
 @pytest.mark.parametrize("sort_function", SORTING_ALGORITHMS)
 @pytest.mark.parametrize("unsorted, expected", [
