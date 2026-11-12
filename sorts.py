@@ -35,7 +35,7 @@ def insertion_sort(array: list[int]) -> list[int]:
         # Iterate through sorted elements in order to find where the sorted key must go.
         while j >= 0 and array[j] > key:
             array[j + 1] = array[j]
-            j - 1
+            j -= 1
 
         # Insert the key in the sorted position.
         array[j + 1] = key
