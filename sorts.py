@@ -43,7 +43,15 @@ def insertion_sort(array: list[int]) -> list[int]:
     return array
 
 def selection_sort(array: list[int]) -> list[int]:
-
+    """Sort a list in ascending order using the selection sort algorithm.
+    
+    Args:
+        array (list[int]): A list of elements to be sorted.
+    
+    Returns:
+        list[int]: The sorted list in ascending order.
+    """
+    
     # Create a shallow copy to prevent modifying the original list.
     array = array.copy()
 
