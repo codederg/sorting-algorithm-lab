@@ -1,68 +1,68 @@
 
-def bubble_sort(array: list[int]) -> list[int]:
+def bubble_sort(items: list[int]) -> list[int]:
     """Sort a list in ascending order using the bubble sort algorithm.
 
     Args:
-        array (list[int]): A list of elements to be sorted.
+        items (list[int]): A list of elements to be sorted.
 
     Returns:
         list[int]: The sorted list in ascending order.
     """
 
     # Create a shallow copy to prevent modifying the original list.
-    array = array.copy()
+    items = items.copy()
 
-    n = len(array)
+    n = len(items)
 
     for i in range(n):
         for j in range(0, n - i - 1):
             # Swap elements if the element found is greater than the next.
-            if array[j] > array[j + 1]:
-                array[j], array[j + 1] = array[j + 1], array[j]
+            if items[j] > items[j + 1]:
+                items[j], items[j + 1] = items[j + 1], items[j]
     
-    return array
+    return items
 
-def insertion_sort(array: list[int]) -> list[int]:
+def insertion_sort(items: list[int]) -> list[int]:
     """Sort a list in ascending order using the insertion sort algorithm.
 
     Args:
-        array (list[int]): A list of elements to be sorted.
+        items (list[int]): A list of elements to be sorted.
 
     Returns:
         list[int]: The sorted list in ascending order.
     """
     # Create a shallow copy to prevent modifying the original list.
-    array = array.copy()
+    items = items.copy()
 
     # Start at the second index
-    for i in range(1, len(array)):
-        key = array[i]  # Track the value being sorted.
+    for i in range(1, len(items)):
+        key = items[i]  # Track the value being sorted.
         j = i - 1
 
         # Iterate through sorted elements in order to find where the sorted key must go.
-        while j >= 0 and array[j] > key:
-            array[j + 1] = array[j]
+        while j >= 0 and items[j] > key:
+            items[j + 1] = items[j]
             j -= 1
 
         # Insert the key in the sorted position.
-        array[j + 1] = key
+        items[j + 1] = key
     
-    return array
+    return items
 
-def selection_sort(array: list[int]) -> list[int]:
+def selection_sort(items: list[int]) -> list[int]:
     """Sort a list in ascending order using the selection sort algorithm.
     
     Args:
-        array (list[int]): A list of elements to be sorted.
+        items (list[int]): A list of elements to be sorted.
     
     Returns:
         list[int]: The sorted list in ascending order.
     """
     
     # Create a shallow copy to prevent modifying the original list.
-    array = array.copy()
+    items = items.copy()
 
-    n = len(array)
+    n = len(items)
 
     # Move through the unsorted portion of the list.
     # Do not loop through the last index, as it is 
@@ -72,12 +72,12 @@ def selection_sort(array: list[int]) -> list[int]:
 
         # Iterate through the unsorted elements to find the smallest value.
         for j in range(i + 1, n):
-            if array[j] < array[min_index]:
+            if items[j] < items[min_index]:
                 min_index = j
 
         # Swap the minimum element with the first 
         # unsorted element to effectively sort the minimum value
         if min_index != i:
-            array[i], array[min_index] = array[min_index], array[i]
+            items[i], items[min_index] = items[min_index], items[i]
 
-    return array
+    return items
