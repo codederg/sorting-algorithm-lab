@@ -8,8 +8,8 @@ def generate_random(size: int, rng: random.Random, min_value: int = 0, max_value
 
     return [rng.randint(min_value, max_value) for _ in range(size)]
 
-def generate_sorted(size: int, rng: random.Random) -> list[int]:
-    pass
+def generate_sorted(size: int) -> list[int]:
+    return [i for i in range(size)]
 
 def generate_reverse_sorted(size: int, rng: random.Random) -> list[int]:
     pass
