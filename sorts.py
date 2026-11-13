@@ -1,3 +1,4 @@
+import random
 
 def bubble_sort(items: list[int]) -> list[int]:
     """Sort a list in ascending order using the bubble sort algorithm.
@@ -137,3 +138,57 @@ def merge(left: list[int], right: list[int]) -> list[int]:
     sorted_list.extend(right[j:])
 
     return sorted_list
+
+def quick_sort(items: list[int], low: int = 0, high: int | None = None) -> list[int]:
+    """Sort a list in-place using randomized Lomuto Quicksort.
+
+    Note:
+        This function is **impure**. It performs an in-place mutation on "items" 
+        (returning the modified list) and depends on random number generation.
+
+    Args:
+        items (list[int]): A list of elements to be sorted.
+        low (int, optional): The starting index of the slice to sort. Defaults to 0.
+        high (int | None, optional): The ending index of the slice to sort. Defaults to None.
+
+    Returns:
+        list[int]: The sorted list in ascending order.
+    """
+
+    if high is None:
+        high = len(items) - 1
+
+    if low < high:
+        pivot_index = partition(items, low, high)
+        quick_sort(items, low, pivot_index - 1)
+        quick_sort(items, pivot_index + 1, high)
+
+    return items
+
+def partition(items: list[int], low: int, high: int) -> int:
+    """Partitions a sublist around a randomly chosen pivot.
+
+    Args:
+        items (list[int]): A list of elements to be sorted.
+        low (int): The starting index of the sublist to partition.
+        high (int): The ending index of the sublist to partition.
+
+    Returns:
+        int: The final index position of the pivot element after partitioning.
+    """
+
+    # Choose a random pivot and swap it to the end.
+    random_index = random.randint(low, high)
+    items[random_index], items[high] = items[high], items[random_index]
+
+    # Set the index to use for comparison.
+    pivot = items[high]
+    i = low - 1
+
+    for j in range(low, high):
+        if items[j] <= pivot:
+            i += 1
+            items[i], items[j] = items[j], items[i]
+
+    items[i + 1], items[high] = items[high], items[i + 1]
+    return i + 1
