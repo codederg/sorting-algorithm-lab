@@ -83,6 +83,14 @@ def selection_sort(items: list[int]) -> list[int]:
     return items
 
 def merge_sort(items: list[int]) -> list[int]:
+    """Sort a list in ascending order using the merge sort algorithm.
+
+    Args:
+        items (list[int]): A list of elements to be sorted.
+
+    Returns:
+        list[int]: The sorted list in ascending order.
+    """
 
     # Do not sort lists with 0-1 elements as they are already sorted.
     if len(items) <= 1:
@@ -102,6 +110,15 @@ def merge_sort(items: list[int]) -> list[int]:
     return merge(left_half, right_half)
 
 def merge(left: list[int], right: list[int]) -> list[int]:
+    """Merge two separate sorted lists into one combined sorted list.
+    
+    Args:
+        left (list[int]): Left half of a sorted list.
+        right (list[int]): Right half of a sorted list.
+
+    Returns:
+        list[int]: The sorted list in ascending order.
+    """
 
     sorted_list = []
     i = j = 0
