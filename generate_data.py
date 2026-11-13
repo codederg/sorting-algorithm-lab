@@ -24,5 +24,3 @@ def generate_nearly_sorted(size: int, rng: random.Random, min_value: int = 0, ma
 
     return data
 
-def generate_empty() -> None:
-    pass
