@@ -1,3 +1,4 @@
+import random
 
 def bubble_sort(items: list[int]) -> list[int]:
     """Sort a list in ascending order using the bubble sort algorithm.
@@ -137,3 +138,30 @@ def merge(left: list[int], right: list[int]) -> list[int]:
     sorted_list.extend(right[j:])
 
     return sorted_list
+
+def quick_sort(items: list[int], low: int = 0, high: int | None = None) -> None:
+    if high is None:
+        high = len(items) - 1
+
+    if low < high:
+        pivot_index = partition(items, low, high)
+        quick_sort(items, low, pivot_index - 1)
+        quick_sort(items, pivot_index + 1, high)
+
+def partition(items: list[int], low: int, high: int) -> int:
+
+    # Choose a random pivot and swap it to the end.
+    random_index = random.randint(low, high)
+    items[random_index], items[high] = items[high], items[random_index]
+
+    # Set the index to use for comparison.
+    pivot = items[high]
+    i = low - 1
+
+    for j in range(low, high):
+        if items[j] <= pivot:
+            i += 1
+            items[i], items[j] = items[j], items[i]
+
+    items[i + 1], items[high] = items[high], items[i + 1]
+    return i + 1
