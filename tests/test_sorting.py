@@ -1,13 +1,14 @@
 from collections.abc import Callable
-from sorts import bubble_sort, insertion_sort, selection_sort
+from sorts import bubble_sort, insertion_sort, selection_sort, merge_sort
 import pytest
 
-SORTING_ALGORITHMS = [bubble_sort, insertion_sort, selection_sort]
+SORTING_ALGORITHMS = [bubble_sort, insertion_sort, selection_sort, merge_sort]
 
 @pytest.mark.parametrize("sort_function", SORTING_ALGORITHMS)
 @pytest.mark.parametrize("unsorted, expected", [
     ([], []),  # Empty list
     ([1], [1]),  # One element
+    ([7, 3, 1, 5, 6, 4, 2], [1, 2, 3, 4, 5, 6, 7]),  # Odd amount of numbers
     ([1, 2, 3, 4], [1, 2, 3, 4]),  # Already sorted
     ([4, 3, 2, 1], [1, 2, 3, 4]),  # Reverse sorted
     ([2, 1, 2, 3, 4, 3], [1, 2, 2, 3, 3, 4]),  # Duplicate values

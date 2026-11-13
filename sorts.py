@@ -81,3 +81,59 @@ def selection_sort(items: list[int]) -> list[int]:
             items[i], items[min_index] = items[min_index], items[i]
 
     return items
+
+def merge_sort(items: list[int]) -> list[int]:
+    """Sort a list in ascending order using the merge sort algorithm.
+
+    Args:
+        items (list[int]): A list of elements to be sorted.
+
+    Returns:
+        list[int]: The sorted list in ascending order.
+    """
+
+    # Do not sort lists with 0-1 elements as they are already sorted.
+    if len(items) <= 1:
+        return items
+
+    # Divide the list into two halves using slices.
+    mid = len(items) // 2
+
+    left_half = items[:mid]
+    right_half = items[mid:]
+
+    # Recursively sort each half.
+    left_half = merge_sort(left_half)
+    right_half = merge_sort(right_half)
+
+    # Merge and return the merged halves.
+    return merge(left_half, right_half)
+
+def merge(left: list[int], right: list[int]) -> list[int]:
+    """Merge two separate sorted lists into one combined sorted list.
+    
+    Args:
+        left (list[int]): Left half of a sorted list.
+        right (list[int]): Right half of a sorted list.
+
+    Returns:
+        list[int]: The sorted list in ascending order.
+    """
+
+    sorted_list = []
+    i = j = 0
+
+    # Compare elements from both lists and append the smaller value.
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            sorted_list.append(left[i])
+            i += 1
+        else:
+            sorted_list.append(right[j])
+            j += 1
+
+    # Append any remaining elements from either list.
+    sorted_list.extend(left[i:])
+    sorted_list.extend(right[j:])
+
+    return sorted_list
