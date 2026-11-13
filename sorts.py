@@ -102,4 +102,21 @@ def merge_sort(items: list[int]) -> list[int]:
     return merge(left_half, right_half)
 
 def merge(left: list[int], right: list[int]) -> list[int]:
-    pass
+
+    sorted_list = []
+    i = j = 0
+
+    # Compare elements from both lists and append the smaller value.
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            sorted_list.append(left[i])
+            i += 1
+        else:
+            sorted_list.append(right[j])
+            j += 1
+
+    # Append any remaining elements from either list.
+    sorted_list.extend(left[i:])
+    sorted_list.extend(right[j:])
+
+    return sorted_list
