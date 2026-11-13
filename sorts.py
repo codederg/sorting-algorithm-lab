@@ -139,7 +139,7 @@ def merge(left: list[int], right: list[int]) -> list[int]:
 
     return sorted_list
 
-def quick_sort(items: list[int], low: int = 0, high: int | None = None) -> None:
+def quick_sort(items: list[int], low: int = 0, high: int | None = None) -> list[int]:
     if high is None:
         high = len(items) - 1
 
@@ -147,6 +147,8 @@ def quick_sort(items: list[int], low: int = 0, high: int | None = None) -> None:
         pivot_index = partition(items, low, high)
         quick_sort(items, low, pivot_index - 1)
         quick_sort(items, pivot_index + 1, high)
+
+    return items
 
 def partition(items: list[int], low: int, high: int) -> int:
 
