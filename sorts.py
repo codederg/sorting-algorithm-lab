@@ -81,3 +81,25 @@ def selection_sort(items: list[int]) -> list[int]:
             items[i], items[min_index] = items[min_index], items[i]
 
     return items
+
+def merge_sort(items: list[int]) -> list[int]:
+
+    # Do not sort lists with 0-1 elements as they are already sorted.
+    if len(items) <= 1:
+        return items
+
+    # Divide the list into two halves using slices.
+    mid = len(items) // 2
+
+    left_half = items[:mid]
+    right_half = items[mid:]
+
+    # Recursively sort each half.
+    left_half = merge_sort(left_half)
+    right_half = merge_sort(right_half)
+
+    # Merge and return the merged halves.
+    return merge(left_half, right_half)
+
+def merge(left: list[int], right: list[int]) -> list[int]:
+    pass
