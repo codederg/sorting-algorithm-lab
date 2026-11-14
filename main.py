@@ -5,10 +5,30 @@ from sorts import bubble_sort, selection_sort, insertion_sort, merge_sort, quick
 def data_generation_settings():
     pass
 
-def settings_navigation():
-    pass
+def display_commands():
+    print("Commands:")
+    print("(1) ")
+    print("(2) ")
+    print("(0) Exit")
 
-def main():
-    pass
+def main() -> None:
+
+    display_commands()
+
+    while True:
+        choice: str = input("Command: #")
+        
+        match choice:
+            case "0":
+                break
+            case "1":
+                data_generation_settings
+            case "2":
+                pass  # TODO: Implement user-chosen sorting algorithm.
+            case "?":
+                display_commands()
+            case _:
+                print(f"{choice} is an invalid command.")
+        
 
 main()
