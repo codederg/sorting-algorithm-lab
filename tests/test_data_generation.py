@@ -1,6 +1,6 @@
 from collections.abc import Callable
 import random
-from generate_data import generate_random, generate_nearly_sorted, generate_sorted
+from generate_data import generate_random, generate_nearly_sorted, generate_sorted, generate_reverse_sorted
 import pytest
 
 RANDOM_SEED = 1
@@ -11,3 +11,9 @@ random_instance.seed(RANDOM_SEED)
 
 def test_random():
     assert generate_random(10, random_instance) == [137, 582, 867, 821, 782, 64, 261, 120, 507, 779]
+
+def test_sorted():
+    assert generate_sorted(5) == [0, 1, 2, 3, 4]
+
+def test_reverse_sorted():
+    assert generate_reverse_sorted(5) == [4, 3, 2, 1, 0]
