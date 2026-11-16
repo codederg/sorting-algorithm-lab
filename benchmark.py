@@ -64,7 +64,7 @@ def benchmark(sort_function: Callable[[list[int]], list[int]], items: list[int])
     # Benchmark the sorting list.
     start_time = time.perf_counter()
     sorted_list = sort_function(items)
-    end_time = time.perf_counter
+    end_time = time.perf_counter()
 
     elapsed = start_time - end_time
 
