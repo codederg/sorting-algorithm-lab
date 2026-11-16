@@ -82,7 +82,7 @@ def benchmark_multiple(sort_function: Callable[[list[int]], list[int]], items: l
         BenchmarkResults: The results gathered from the benchmark.
     """
 
-    times: list[float]
+    times: list[float] = []
 
     for _ in range(trials):
         _, elapsed = benchmark(sort_function, items)
