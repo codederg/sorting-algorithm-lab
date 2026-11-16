@@ -10,9 +10,6 @@ def bubble_sort(items: list[int]) -> list[int]:
         list[int]: The sorted list in ascending order.
     """
 
-    # Create a shallow copy to prevent modifying the original list.
-    items = items.copy()
-
     n = len(items)
 
     for i in range(n):
@@ -32,8 +29,6 @@ def insertion_sort(items: list[int]) -> list[int]:
     Returns:
         list[int]: The sorted list in ascending order.
     """
-    # Create a shallow copy to prevent modifying the original list.
-    items = items.copy()
 
     # Start at the second index
     for i in range(1, len(items)):
@@ -59,9 +54,6 @@ def selection_sort(items: list[int]) -> list[int]:
     Returns:
         list[int]: The sorted list in ascending order.
     """
-    
-    # Create a shallow copy to prevent modifying the original list.
-    items = items.copy()
 
     n = len(items)
 
