@@ -31,7 +31,7 @@ class BenchmarkResults():
         self.min = min(data)
         self.max = max(data)
 
-    def _calculate_iqr(data: list[float]) -> float:
+    def _calculate_iqr(self, data: list[float]) -> float:
         """Calculate the iqr of the dataset.
 
         Args:
