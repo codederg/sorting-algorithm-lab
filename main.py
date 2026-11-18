@@ -1,10 +1,12 @@
 from __future__ import annotations
 import random
 from typing import Any, Protocol
+from collections.abc import Callable
 import os
 import subprocess
 from generate_data import generate_random, generate_nearly_sorted, generate_sorted, generate_reverse_sorted
 from sorts import bubble_sort, selection_sort, insertion_sort, merge_sort, quick_sort
+from benchmark import benchmark_multiple, BenchmarkResults
 
 items_to_sort: list[int] = None
 length_of_data: int = 10
@@ -168,8 +170,62 @@ def prompt_for_range() -> tuple[int, int]:
 def display_commands() -> None:
     print("Commands:")
     print("(1) Generate random data.")
-    print("(2) ")
+    print("(2) Benchmark")
     print("(0) Exit")
+
+def benchmark() -> None:
+
+    selected_algorithm: Callable[[list[int]], list[int]] = None
+    while True:
+        clear_terminal()
+        display_sorting_options()
+
+        choice: str = input("Command: ")
+
+        match choice:
+            case "0":
+                break
+            case "1":
+                selected_algorithm = bubble_sort
+            case "2":
+                selected_algorithm = selection_sort
+            case "3":
+                selected_algorithm = insertion_sort
+            case "4":
+                selected_algorithm = merge_sort
+            case "5":
+                selected_algorithm = quick_sort
+            case _:
+                print(f"{choice} is an invalid command.")
+        break
+
+    if selected_algorithm is None:
+        return
+
+    results = benchmark_multiple(selected_algorithm, items_to_sort, 50)
+    display_benchmark_results(results)
+    
+    # Freeze the terminal until the user hits enter.
+    input("Hit enter to return.")
+
+def display_benchmark_results(results: BenchmarkResults) -> None:
+    print("| Benchmark Results |")
+    print(f"Mean: {results.mean} ms")
+    print(f"Median: {results.median} ms")
+    print(f"Sample StDev: {results.stdev}")
+    print(f"Sample Variance: {results.variance}")
+    print(f"Min: {results.min} ms")
+    print(f"IQR: {results.iqr} ms")
+    print(f"Max: {results.max} ms")
+
+def display_sorting_options() -> None:
+    print("Algorithms:")
+    print("(1) Bubble sort")
+    print("(2) Selection sort")
+    print("(3) Insertion sort")
+    print("(4) Merge sort")
+    print("(5) Quicksort")
+    print("(0) Return")
 
 def main() -> None:
     global items_to_sort
@@ -189,7 +245,7 @@ def main() -> None:
             case "1":
                 data_generation_settings()
             case "2":
-                pass  # TODO: Implement user-chosen sorting algorithm.
+                benchmark()
             case _:
                 print(f"{choice} is an invalid command.")
         
