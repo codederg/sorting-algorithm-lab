@@ -10,7 +10,7 @@ from benchmark import benchmark_multiple, BenchmarkResults
 from visualization import visualize_algorithm_test, visualize_scaled_test
 
 DEFAULT_GENERATION_LENGTH: int = 50
-AMOUNT_OF_TRIALS = 50
+AMOUNT_OF_TRIALS = 10
 SORTING_ALGORITHMS: dict[str, Callable[[list[int]], list[int]]] = {  # {name: sort_function}
     "Bubble Sort": bubble_sort,
     "Selection Sort": selection_sort,
@@ -145,18 +145,23 @@ def scaled_test() -> None:
     # Let the user choose the data generation algorithm.
     generation_method, additional_arguments = choose_generation_method()
 
-    # Create the data sets in the form of {length: data_set}.
-    data_sets: dict[int, list[int]] = {}
+    # Generate the data sets.
+    data_sets: list[int] = []
+    lengths: list[int] = []
     for i in range(amount_of_sets):
         length = start_length + delta_length * i
         data_set = generate_data_set(length, generation_method, additional_arguments)
-        data_sets[length] = data_set        
+        lengths.append(length)
+        data_sets.append(data_set)
 
     # Benchmark each algorithm with each data set and gather results.
-    results: dict[str, dict[int, BenchmarkResults]] = {}
+    results: dict[str, list[BenchmarkResults]] = {}
     for name, algorithm in SORTING_ALGORITHMS.items():
-        for length, data_set in data_sets.items():
-            results[name][length] = benchmark_multiple(algorithm, data_set, AMOUNT_OF_TRIALS) 
+        results[name] = []
+        for data_set in data_sets:
+            results[name].append(benchmark_multiple(algorithm, data_set, AMOUNT_OF_TRIALS))
+
+    visualize_scaled_test(lengths, results)
     
 def algorithm_test() -> None:
 
