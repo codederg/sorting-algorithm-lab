@@ -4,24 +4,17 @@ matplotlib.use("QtAgg")  # Must be called before importing pyplot.
 import matplotlib.pyplot as plt
 from benchmark import BenchmarkResults
 
-def visualize_scaled_test(algorithm_name: str, results: dict[int, BenchmarkResults]) -> None:
-    """Display time taken for different data set lengths for a single sorting algorithm.
+def visualize_scaled_test(lengths: list[int], data: dict[str, list[BenchmarkResults]]) -> None:
 
-    Displays a line graph to indicate how the length of a data set affects sorting time.
+    for algorithm_name, results in data.items():
+        y = [i.median for i in results]
+        plt.plot(lengths, y, label = algorithm_name)
 
-    Args:
-        algorithm_name (str): _description_
-        results (dict[int, BenchmarkResults]): _description_
-    """
-    x = results.keys()
-    y = [i.median for i in results.values()]
-
-    plt.plot(x, y)
-
-    plt.title(f"Scaling data set lengths for {algorithm_name}")
+    plt.title(f"Scaling data set lengths")
     plt.xlabel("Length of data set")
     plt.ylabel("Median Time Taken (ms)")
 
+    plt.legend()
     plt.show()
 
 def visualize_algorithm_test(results: dict[str, BenchmarkResults]) -> None:
