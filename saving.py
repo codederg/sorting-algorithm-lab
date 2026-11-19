@@ -24,7 +24,7 @@ def prompt_load() -> None:
         if header == "comparison":
             data = next(reader, None)
             if data:
-                print(data)
+                
                 try:
                     items = GENERATION_FUNCTIONS[data[0]](int(data[1]), data[2])
                 except:
