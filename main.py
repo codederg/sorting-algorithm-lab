@@ -7,6 +7,7 @@ import subprocess
 from generate_data import generate_random, generate_nearly_sorted, generate_sorted, generate_reverse_sorted
 from sorts import bubble_sort, selection_sort, insertion_sort, merge_sort, quick_sort
 from benchmark import benchmark_multiple, BenchmarkResults
+from visualization import visualize_algorithm_test
 
 DEFAULT_GENERATION_LENGTH: int = 50
 AMOUNT_OF_TRIALS = 50
@@ -195,6 +196,8 @@ def algorithm_test() -> None:
     for name, sort in SORTING_ALGORITHMS.items():
         result = benchmark_multiple(sort, data_set, AMOUNT_OF_TRIALS)
         results[name] = result
+
+    visualize_algorithm_test(results)
 
 def display_sorting_options() -> None:
     print("Algorithms:")
