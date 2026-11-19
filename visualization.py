@@ -8,7 +8,15 @@ def visualize_scaled_test() -> None:
     pass
 
 def visualize_algorithm_test(results: dict[str, BenchmarkResults]) -> None:
+    """Display time taken for different sorting algorithms.
 
+    Displays a bar chart to indicate the differences in ms of each sorting algorithm.
+    Presents each sorting algorithm across the x-axis and the median time taken (ms) 
+    across the y-axis. Displays the median, as it is less affected by outliers.
+
+    Args:
+        results (dict[str, BenchmarkResults]): The name of the sorting algorithm and its results.
+    """
     categories = results.keys()
     values = [i.median for i in results.values()]
 
