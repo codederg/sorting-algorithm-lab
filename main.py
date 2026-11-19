@@ -164,7 +164,7 @@ def algorithm_test() -> None:
         result = benchmark_multiple(sort, data_set, AMOUNT_OF_TRIALS)
         results[name] = result
 
-    save_comparison_benchmark(generation_name, length, additional_arguments)
+    save_comparison_benchmark(results, generation_name)
     visualize_algorithm_test(results)
 
 def display_sorting_options() -> None:
@@ -197,7 +197,6 @@ def main() -> None:
                 algorithm_test()
             case "3":
                 prompt_load()
-                input("...")
             case _:
                 print(f"{choice} is an invalid command.")
 
