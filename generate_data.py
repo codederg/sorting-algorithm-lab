@@ -83,6 +83,10 @@ def generate_nearly_sorted(size: int, rng: random.Random, swaps: int = 3) -> lis
 
     data: list[int] = generate_sorted(size)
 
+    # If no data set is generated, return an empty one without swaps.
+    if not data:
+        return []
+
     for _ in range(swaps):
         i = rng.randrange(size)
         j = rng.randrange(size)
