@@ -7,7 +7,7 @@ import subprocess
 from generate_data import generate_random, generate_nearly_sorted, generate_sorted, generate_reverse_sorted
 from sorts import bubble_sort, selection_sort, insertion_sort, merge_sort, quick_sort
 from benchmark import benchmark_multiple, BenchmarkResults
-from visualization import visualize_algorithm_test
+from visualization import visualize_algorithm_test, visualize_scaled_test
 
 DEFAULT_GENERATION_LENGTH: int = 50
 AMOUNT_OF_TRIALS = 50
@@ -138,6 +138,7 @@ def prompt_for_range() -> tuple[int, int]:
 def scaled_test() -> None:
 
     selected_algorithm: Callable[[list[int]], list[int]] = None
+    algorithm_name: str = ""
     while True:
         clear_terminal()
         display_sorting_options()
@@ -149,14 +150,19 @@ def scaled_test() -> None:
                 break
             case "1":
                 selected_algorithm = bubble_sort
+                algorithm_name = "Bubble Sort"
             case "2":
                 selected_algorithm = selection_sort
+                algorithm_name = "Selection Sort"
             case "3":
                 selected_algorithm = insertion_sort
+                algorithm_name = "Insertion Sort"
             case "4":
                 selected_algorithm = merge_sort
+                algorithm_name = "Merge Sort"
             case "5":
                 selected_algorithm = quick_sort
+                algorithm_name = "Quick Sort"
             case _:
                 print(f"{choice} is an invalid command.")
         break
@@ -183,6 +189,8 @@ def scaled_test() -> None:
     results: dict[int, BenchmarkResults] = {}
     for length, data_set in data_sets.items():
         results[length] = benchmark_multiple(selected_algorithm, data_set, AMOUNT_OF_TRIALS)
+
+    visualize_scaled_test(algorithm_name, results)
     
 def algorithm_test() -> None:
 
