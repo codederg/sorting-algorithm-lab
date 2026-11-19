@@ -1,34 +1,14 @@
 from __future__ import annotations
 import random
-from typing import Any, Protocol
-from collections.abc import Callable
 import os
 import subprocess
-from generate_data import generate_random, generate_nearly_sorted, generate_sorted, generate_reverse_sorted
-from sorts import bubble_sort, selection_sort, insertion_sort, merge_sort, quick_sort
-from benchmark import benchmark_multiple, BenchmarkResults
+from generate_data import generate_random, GenerationMethod, GENERATION_FUNCTIONS
+from sorts import SORTING_ALGORITHMS
+from benchmark import benchmark_multiple, BenchmarkResults, AMOUNT_OF_TRIALS
 from visualization import visualize_algorithm_test, visualize_scaled_test
-from saving import save_comparison_benchmark
+from saving import save_comparison_benchmark, prompt_load
 
 DEFAULT_GENERATION_LENGTH: int = 50
-AMOUNT_OF_TRIALS = 10
-SORTING_ALGORITHMS: dict[str, Callable[[list[int]], list[int]]] = {
-    "Bubble Sort": bubble_sort,
-    "Selection Sort": selection_sort,
-    "Insertion Sort": insertion_sort,
-    "Merge Sort": merge_sort,
-    "Quick Sort": quick_sort,
-}
-GENERATION_FUNCTIONS: dict[str, GenerationMethod] = {
-    "Random": generate_random,
-    "Nearly Sorted": generate_nearly_sorted,
-    "Sorted": generate_sorted,
-    "Reverse Sorted": generate_reverse_sorted
-}
-
-class GenerationMethod(Protocol):
-    def __call__(self, size: int, *args: Any, **kwargs: Any) -> list[int]:
-        pass
 
 class NegativeNumberError(Exception):
     pass
