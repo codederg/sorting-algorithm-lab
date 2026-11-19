@@ -137,40 +137,7 @@ def prompt_for_range() -> tuple[int, int]:
 
 def scaled_test() -> None:
 
-    selected_algorithm: Callable[[list[int]], list[int]] = None
-    algorithm_name: str = ""
-    while True:
-        clear_terminal()
-        display_sorting_options()
-
-        choice: str = input("Command: ")
-
-        match choice:
-            case "0":
-                break
-            case "1":
-                selected_algorithm = bubble_sort
-                algorithm_name = "Bubble Sort"
-            case "2":
-                selected_algorithm = selection_sort
-                algorithm_name = "Selection Sort"
-            case "3":
-                selected_algorithm = insertion_sort
-                algorithm_name = "Insertion Sort"
-            case "4":
-                selected_algorithm = merge_sort
-                algorithm_name = "Merge Sort"
-            case "5":
-                selected_algorithm = quick_sort
-                algorithm_name = "Quick Sort"
-            case _:
-                print(f"{choice} is an invalid command.")
-        break
-
-    # Exit the test if they choose.
-    if selected_algorithm is None:
-        return
-
+    # Let the user determine the characteristics of the data sets.
     amount_of_sets = prompt_for_positive_number("Amount of data sets: ")
     start_length = prompt_for_positive_number("Start length: ")
     delta_length = prompt_for_positive_number("Net length increase for each data set: ")
@@ -185,12 +152,11 @@ def scaled_test() -> None:
         data_set = generate_data_set(length, generation_method, additional_arguments)
         data_sets[length] = data_set        
 
-    # Sort each data set and gather benchmark results.
-    results: dict[int, BenchmarkResults] = {}
-    for length, data_set in data_sets.items():
-        results[length] = benchmark_multiple(selected_algorithm, data_set, AMOUNT_OF_TRIALS)
-
-    visualize_scaled_test(algorithm_name, results)
+    # Benchmark each algorithm with each data set and gather results.
+    results: dict[str, dict[int, BenchmarkResults]] = {}
+    for name, algorithm in SORTING_ALGORITHMS.items():
+        for length, data_set in data_sets.items():
+            results[name][length] = benchmark_multiple(algorithm, data_set, AMOUNT_OF_TRIALS) 
     
 def algorithm_test() -> None:
 
