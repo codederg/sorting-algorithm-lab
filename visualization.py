@@ -5,7 +5,14 @@ import matplotlib.pyplot as plt
 from benchmark import BenchmarkResults
 
 def visualize_scaled_test(algorithm_name: str, results: dict[int, BenchmarkResults]) -> None:
+    """Display time taken for different data set lengths for a single sorting algorithm.
 
+    Displays a line graph to indicate how the length of a data set affects sorting time.
+
+    Args:
+        algorithm_name (str): _description_
+        results (dict[int, BenchmarkResults]): _description_
+    """
     x = results.keys()
     y = [i.median for i in results.values()]
 
