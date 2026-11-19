@@ -8,12 +8,8 @@ from generate_data import generate_random, generate_nearly_sorted, generate_sort
 from sorts import bubble_sort, selection_sort, insertion_sort, merge_sort, quick_sort
 from benchmark import benchmark_multiple, BenchmarkResults
 
-items_to_sort: list[int] = None
-length_of_data: int = 10
+DEFAULT_GENERATION_LENGTH: int = 50
 data_generation_method_name : str = "Sorted"
-
-additional_generation_arguments: list[any] = None
-selected_generation: GenerationMethod = generate_sorted
 
 class GenerationMethod(Protocol):
     def __call__(self, size: int, *args: Any, **kwargs: Any) -> list[int]:
@@ -25,36 +21,8 @@ class NegativeNumberError(Exception):
 def clear_terminal() -> None:
     subprocess.run(["cls" if os.name == "nt" else "clear"])
 
-def data_generation_settings() -> None:
-    global length_of_data
-
-    while True:
-        clear_terminal()
-        prompt_generation_settings()
-
-        choice: str = input("Data Generation: ")
-        match choice:
-            case "0":  # Return.
-                break            
-            case "1":  # Choose method for generation.
-                choose_generation_method()
-            case "2":  # Prompt length of data.
-                length_of_data = prompt_for_positive_number("Length of new data: ")
-            case "3":  # Generate a new data set.
-                generate_and_update_list()
-            case _:
-                print(f"{choice} is an invalid command.")
-
-def prompt_generation_settings() -> None:
-    print("| Data generation |")
-    print(f"Current list: {items_to_sort}")
-    print(f"(1) Choose method ({data_generation_method_name})")
-    print(f"(2) Length of data (n = {length_of_data})")
-    print(f"(3) Generate new data set")
-    print("(0) Return")
-
-def choose_generation_method() -> None:
-    global data_generation_method_name, additional_generation_arguments, selected_generation
+def choose_generation_method() -> tuple[GenerationMethod, list[any] | None, ]:
+    global data_generation_method_name
 
     while True:
         clear_terminal()
@@ -67,27 +35,18 @@ def choose_generation_method() -> None:
             case "1":  # Generate random.
                 min_value, max_value = prompt_for_range()
                 random_instance = prompt_for_random_instance()
-                data_generation_method_name = "Random"
-                selected_generation = generate_random
-                additional_generation_arguments = [random_instance, min_value, max_value]
-                break
+                return generate_random, (random_instance, min_value, max_value)
             case "2":  # Generate sorted.
                 data_generation_method_name = "Sorted"
-                selected_generation = generate_sorted
-                additional_generation_arguments = None
-                break
+                return generate_sorted, None
             case "3":  # Generate reverse sorted.
                 data_generation_method_name = "Reverse Sorted"
-                selected_generation = generate_reverse_sorted
-                additional_generation_arguments = None
-                break
+                return generate_reverse_sorted, None
             case "4":  # Generate nearly sorted.
                 swaps: int = prompt_for_positive_number("Amount of random swaps: ")
                 random_instance = prompt_for_random_instance()
                 data_generation_method_name = "Nearly Sorted"
-                additional_generation_arguments = [random_instance, swaps]
-                selected_generation = generate_nearly_sorted
-                break
+                return generate_nearly_sorted, (random_instance, swaps)
             case _:
                 print(f"{choice} is an invalid command.")
 
@@ -99,13 +58,12 @@ def prompt_generation_methods() -> None:
     print("(4) Nearly Sorted")
     print("(0) Return")
 
-def generate_and_update_list() -> None:
-    global items_to_sort
+def generate_data_set(length: int, generation_algorithm: GenerationMethod, additional_arguments: list[any] | None = None) -> list[int]:
 
-    if additional_generation_arguments is None:
-        items_to_sort = selected_generation(length_of_data)
+    if additional_arguments is None:
+        return generation_algorithm(length)
     else:
-        items_to_sort = selected_generation(length_of_data, *additional_generation_arguments)
+        return generation_algorithm(length, *additional_arguments)
 
 def prompt_for_positive_number(prompt: str) -> int:
     clear_terminal()
@@ -169,11 +127,12 @@ def prompt_for_range() -> tuple[int, int]:
 
 def display_commands() -> None:
     print("Commands:")
-    print("(1) Generate random data.")
-    print("(2) Benchmark")
+    print("(1) Test the same algorithm with different data set lengths.")
+    print("(2) Test different algorithms with the same data set.")
+    print("(3) Test the same algorithm with different generation methods.")
     print("(0) Exit")
 
-def benchmark() -> None:
+def scaled_test() -> None:
 
     selected_algorithm: Callable[[list[int]], list[int]] = None
     while True:
@@ -199,11 +158,32 @@ def benchmark() -> None:
                 print(f"{choice} is an invalid command.")
         break
 
+    # Exit the test if they choose.
     if selected_algorithm is None:
         return
 
-    results = benchmark_multiple(selected_algorithm, items_to_sort, 50)
-    display_benchmark_results(results)
+    amount_of_sets = prompt_for_positive_number("Amount of data sets: ")
+    start_length = prompt_for_positive_number("Start length: ")
+    delta_length = prompt_for_positive_number("Net length increase for each data set: ")
+
+    # Let the user choose the data generation algorithm.
+    clear_terminal()
+    generation_method, additional_arguments = choose_generation_method()
+
+    # Create the data sets in the form of {length: data_set}.
+    data_sets: dict[int, list[int]] = {}
+    for i in range(amount_of_sets):
+        length = start_length + delta_length * i
+        data_set = generate_data_set(length, generation_method, additional_arguments)
+        data_sets[length] = data_set        
+
+    # Sort each data set and gather benchmark results.
+    results: dict[int, BenchmarkResults] = {}
+    for length, data_set in data_sets.items():
+        results[length] = benchmark_multiple(selected_algorithm, data_set, 50)
+
+    for length, result in results.items():
+        print(f"Length: {length} | Mean: {result.mean:.5f} ms")
     
     # Freeze the terminal until the user hits enter.
     input("Hit enter to return.")
@@ -231,7 +211,7 @@ def main() -> None:
     global items_to_sort
 
     # Pregenerate a list of random values.
-    items_to_sort = generate_random(length_of_data, random.Random())
+    items_to_sort = generate_random(DEFAULT_GENERATION_LENGTH, random.Random())
 
     while True:
         clear_terminal()
@@ -243,9 +223,11 @@ def main() -> None:
             case "0":
                 break
             case "1":
-                data_generation_settings()
+                scaled_test()
             case "2":
-                benchmark()
+                pass
+            case "3":
+                pass
             case _:
                 print(f"{choice} is an invalid command.")
         
