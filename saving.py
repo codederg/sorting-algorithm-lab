@@ -23,7 +23,8 @@ def save_comparison_benchmark(data_generation_name: str, length: int, additional
             [*additional_arguments],
         ]
 
-    print(data)
     with (COMPARISON_DIRECTORY / file_name).open("w", newline = "", encoding = "utf-8") as file:
+        file.write("comparison\n")
+
         writer = csv.writer(file)
         writer.writerow(data)
