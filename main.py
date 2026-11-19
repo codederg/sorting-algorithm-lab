@@ -9,6 +9,15 @@ from sorts import bubble_sort, selection_sort, insertion_sort, merge_sort, quick
 from benchmark import benchmark_multiple, BenchmarkResults
 
 DEFAULT_GENERATION_LENGTH: int = 50
+AMOUNT_OF_TRIALS = 50
+SORTING_ALGORITHMS: dict[str, Callable[[list[int]], list[int]]] = {  # {name: sort_function}
+    "Bubble Sort": bubble_sort,
+    "Selection Sort": selection_sort,
+    "Insertion Sort": insertion_sort,
+    "Merge Sort": merge_sort,
+    "Quick Sort": quick_sort,
+}
+
 data_generation_method_name : str = "Sorted"
 
 class GenerationMethod(Protocol):
@@ -167,7 +176,6 @@ def scaled_test() -> None:
     delta_length = prompt_for_positive_number("Net length increase for each data set: ")
 
     # Let the user choose the data generation algorithm.
-    clear_terminal()
     generation_method, additional_arguments = choose_generation_method()
 
     # Create the data sets in the form of {length: data_set}.
@@ -180,13 +188,20 @@ def scaled_test() -> None:
     # Sort each data set and gather benchmark results.
     results: dict[int, BenchmarkResults] = {}
     for length, data_set in data_sets.items():
-        results[length] = benchmark_multiple(selected_algorithm, data_set, 50)
-
-    for length, result in results.items():
-        print(f"Length: {length} | Mean: {result.mean:.5f} ms")
+        results[length] = benchmark_multiple(selected_algorithm, data_set, AMOUNT_OF_TRIALS)
     
-    # Freeze the terminal until the user hits enter.
-    input("Hit enter to return.")
+def algorithm_test() -> None:
+
+    length = prompt_for_positive_number("Length: ")
+    generation_method, additional_arguments = choose_generation_method()
+
+    data_set = generate_data_set(length, generation_method, additional_arguments)
+
+    results: dict[str, BenchmarkResults] = {}
+
+    for name, sort in SORTING_ALGORITHMS.items():
+        result = benchmark_multiple(sort, data_set, AMOUNT_OF_TRIALS)
+        results[name] = result
 
 def display_benchmark_results(results: BenchmarkResults) -> None:
     print("| Benchmark Results |")
@@ -225,7 +240,7 @@ def main() -> None:
             case "1":
                 scaled_test()
             case "2":
-                pass
+                algorithm_test()
             case "3":
                 pass
             case _:
