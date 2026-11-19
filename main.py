@@ -60,6 +60,7 @@ def display_commands() -> None:
     print("Commands:")
     print("(1) Test the same algorithm with different data set lengths.")
     print("(2) Test different algorithms with the same data set.")
+    print("(3) Load csv result file.")
     print("(0) Exit")
 
 def prompt_for_positive_number(prompt: str) -> int:
@@ -163,7 +164,7 @@ def algorithm_test() -> None:
         result = benchmark_multiple(sort, data_set, AMOUNT_OF_TRIALS)
         results[name] = result
 
-    save_comparison_benchmark(name, length, additional_arguments)
+    save_comparison_benchmark(generation_name, length, additional_arguments)
     visualize_algorithm_test(results)
 
 def display_sorting_options() -> None:
@@ -194,6 +195,9 @@ def main() -> None:
                 scaled_test()
             case "2":
                 algorithm_test()
+            case "3":
+                prompt_load()
+                input("...")
             case _:
                 print(f"{choice} is an invalid command.")
 
