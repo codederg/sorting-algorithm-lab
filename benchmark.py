@@ -13,7 +13,7 @@ class BenchmarkResults():
         mean (float): The average of the dataset.
         median (float): The middle value of the dataset.
     """
-    def __init__(self, data: list[float], algorithm: Callable[[list[int]], list[int]]) -> BenchmarkResults:
+    def __init__(self, data: list[float]) -> BenchmarkResults:
         """Initialize the results of the benchmark.
 
         Args:
@@ -22,8 +22,6 @@ class BenchmarkResults():
         self.data = data
         self.mean = mean(data)
         self.median = median(data)
-
-        self.algorithm = algorithm
 
 def benchmark(sort_function: Callable[[list[int]], list[int]], items: list[int]) -> tuple[list[int], float]:
     """Benchmark a sorting algorithm function.
@@ -69,4 +67,4 @@ def benchmark_multiple(sort_function: Callable[[list[int]], list[int]], items: l
         _, elapsed = benchmark(sort_function, items)
         times.append(elapsed)
 
-    return BenchmarkResults(times, sort_function)
+    return BenchmarkResults(times)
