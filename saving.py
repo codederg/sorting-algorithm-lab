@@ -8,7 +8,7 @@ def save_comparison_benchmark(data_generation_name: str, length: int, additional
 
     now = datetime.now()
     timestamp = now.strftime("%Y-%m-%d")
-    file_name = f"{data_generation_name.replace(" ", "_")}_{timestamp}.csv"
+    file_name = f"{data_generation_name.lower().replace(" ", "_")}_{timestamp}.csv"
 
     data = []
     if additional_arguments is None:
