@@ -17,25 +17,30 @@ def prompt_load() -> None:
         return
     file_path = Path(raw_path).resolve()
 
+    # Open 
     with file_path.open("r", newline = "", encoding = "utf-8") as file:
         reader = csv.reader(file)
-        header = "".join(next(reader))
 
+        # Get header to determine type of test done with the file.
+        header = "".join(next(reader))
         if header == "comparison":
+            # Data for a comparison test is always on the second line.
             data = next(reader, None)
             if data:
-                
+                # Ask for forgiveness if there is no additional arguments.
                 try:
                     items = GENERATION_FUNCTIONS[data[0]](int(data[1]), data[2])
                 except:
                     items = GENERATION_FUNCTIONS[data[0]](int(data[1]))
 
+                # Generate a dataset.
                 results: dict[str, BenchmarkResults] = {}
             
                 for sort_name, sort in SORTING_ALGORITHMS.items():
                     result = benchmark_multiple(sort, items, AMOUNT_OF_TRIALS)
                     results[sort_name] = result
-                
+
+                # Visualize the loaded dataset.
                 visualize_algorithm_test(results)
 
 
