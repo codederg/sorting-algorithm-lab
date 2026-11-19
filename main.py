@@ -18,8 +18,6 @@ SORTING_ALGORITHMS: dict[str, Callable[[list[int]], list[int]]] = {  # {name: so
     "Quick Sort": quick_sort,
 }
 
-data_generation_method_name : str = "Sorted"
-
 class GenerationMethod(Protocol):
     def __call__(self, size: int, *args: Any, **kwargs: Any) -> list[int]:
         pass
@@ -30,12 +28,11 @@ class NegativeNumberError(Exception):
 def clear_terminal() -> None:
     subprocess.run(["cls" if os.name == "nt" else "clear"])
 
-def choose_generation_method() -> tuple[GenerationMethod, list[any] | None, ]:
-    global data_generation_method_name
+def choose_generation_method() -> tuple[GenerationMethod, list[any] | None]:
 
     while True:
         clear_terminal()
-        prompt_generation_methods()
+        display_generation_methods()
         choice: str = input("Generate: ")
         
         match choice:
@@ -46,26 +43,15 @@ def choose_generation_method() -> tuple[GenerationMethod, list[any] | None, ]:
                 random_instance = prompt_for_random_instance()
                 return generate_random, (random_instance, min_value, max_value)
             case "2":  # Generate sorted.
-                data_generation_method_name = "Sorted"
                 return generate_sorted, None
             case "3":  # Generate reverse sorted.
-                data_generation_method_name = "Reverse Sorted"
                 return generate_reverse_sorted, None
             case "4":  # Generate nearly sorted.
                 swaps: int = prompt_for_positive_number("Amount of random swaps: ")
                 random_instance = prompt_for_random_instance()
-                data_generation_method_name = "Nearly Sorted"
                 return generate_nearly_sorted, (random_instance, swaps)
             case _:
                 print(f"{choice} is an invalid command.")
-
-def prompt_generation_methods() -> None:
-    print("Select a way to generate data:")
-    print("(1) Random")
-    print("(2) Sorted")
-    print("(3) Reverse Sorted")
-    print("(4) Nearly Sorted")
-    print("(0) Return")
 
 def generate_data_set(length: int, generation_algorithm: GenerationMethod, additional_arguments: list[any] | None = None) -> list[int]:
 
@@ -73,6 +59,20 @@ def generate_data_set(length: int, generation_algorithm: GenerationMethod, addit
         return generation_algorithm(length)
     else:
         return generation_algorithm(length, *additional_arguments)
+
+def display_generation_methods() -> None:
+    print("Select a way to generate data:")
+    print("(1) Random")
+    print("(2) Sorted")
+    print("(3) Reverse Sorted")
+    print("(4) Nearly Sorted")
+    print("(0) Return")
+
+def display_commands() -> None:
+    print("Commands:")
+    print("(1) Test the same algorithm with different data set lengths.")
+    print("(2) Test different algorithms with the same data set.")
+    print("(0) Exit")
 
 def prompt_for_positive_number(prompt: str) -> int:
     clear_terminal()
@@ -133,13 +133,6 @@ def prompt_for_range() -> tuple[int, int]:
                 break
 
     return min_value, max_value
-
-def display_commands() -> None:
-    print("Commands:")
-    print("(1) Test the same algorithm with different data set lengths.")
-    print("(2) Test different algorithms with the same data set.")
-    print("(3) Test the same algorithm with different generation methods.")
-    print("(0) Exit")
 
 def scaled_test() -> None:
 
@@ -203,16 +196,6 @@ def algorithm_test() -> None:
         result = benchmark_multiple(sort, data_set, AMOUNT_OF_TRIALS)
         results[name] = result
 
-def display_benchmark_results(results: BenchmarkResults) -> None:
-    print("| Benchmark Results |")
-    print(f"Mean: {results.mean} ms")
-    print(f"Median: {results.median} ms")
-    print(f"Sample StDev: {results.stdev}")
-    print(f"Sample Variance: {results.variance}")
-    print(f"Min: {results.min} ms")
-    print(f"IQR: {results.iqr} ms")
-    print(f"Max: {results.max} ms")
-
 def display_sorting_options() -> None:
     print("Algorithms:")
     print("(1) Bubble sort")
@@ -241,10 +224,7 @@ def main() -> None:
                 scaled_test()
             case "2":
                 algorithm_test()
-            case "3":
-                pass
             case _:
                 print(f"{choice} is an invalid command.")
-        
 
 main()
