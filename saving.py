@@ -11,7 +11,7 @@ from generate_data import GENERATION_FUNCTIONS
 COMPARISON_DIRECTORY = Path(__file__).resolve().parent / "results" / "comparison"
 
 def prompt_load() -> None:
-    raw_path = questionary.path("Select a file to load: ").ask()
+    raw_path = questionary.path("Select a file to load: ", default = "./results/").ask()
 
     if not raw_path:
         return
