@@ -1,6 +1,6 @@
 from __future__ import annotations
-from typing import Any, Protocol
 import random
+from typing import Any, Protocol
 
 class GenerationMethod(Protocol):
     def __call__(self, size: int, *args: Any, **kwargs: Any) -> list[int]:
