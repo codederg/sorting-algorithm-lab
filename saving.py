@@ -1,4 +1,4 @@
-import csv
+import json
 import questionary
 from pathlib import Path
 from datetime import datetime
@@ -17,16 +17,16 @@ def prompt_load() -> None:
     file_path = Path(raw_path).resolve()
 
     with file_path.open("r", newline = "", encoding = "utf-8") as file:
-        reader = csv.reader(file)
+        data = json.load(file)
 
-        # Get header to determine type of test done with the file.
-        header = "".join(next(reader))
-        if header == "comparison":
+        test_type: str = data["test_type"]
+
+        if test_type == "Comparison":
 
             results: dict[str, BenchmarkResults] = {}
             for name in SORTING_ALGORITHMS.keys():
-                row = [float(f) for f in next(reader)]
-                results[name] = BenchmarkResults(row)
+                times = data[name]
+                results[name] = BenchmarkResults(times)
             visualize_algorithm_test(results)
 
 def save_scaling_benchmark(lengths: list[int], results: dict[str, list[BenchmarkResults]], data_generation_name: str) -> None:
