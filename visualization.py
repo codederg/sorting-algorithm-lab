@@ -1,6 +1,7 @@
 import matplotlib
 matplotlib.use("QtAgg")  # Must be called before importing pyplot.
 import matplotlib.pyplot as plt
+
 from benchmark import BenchmarkResults
 
 def visualize_scaled_test(lengths: list[int], data: dict[str, list[BenchmarkResults]], generation_method_name: str) -> None:
