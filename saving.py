@@ -31,7 +31,7 @@ def prompt_load() -> None:
                 for name in SORTING_ALGORITHMS.keys():
                     times = data[name]
                     results[name] = BenchmarkResults(times)
-                visualize_algorithm_test(results)
+                visualize_algorithm_test(results, data["data_generation"])
             elif test_type == "Scaling":
                 # Visualize a scaling test.
                 lengths = []
@@ -41,7 +41,7 @@ def prompt_load() -> None:
                     for algorithm, times in algorithm_data.items():
                         l = results[algorithm] = results.get(algorithm, [])
                         l.append(BenchmarkResults(times))
-                visualize_scaled_test(lengths, results)
+                visualize_scaled_test(lengths, results, data["data_generation"])
             else:
                 input(f"{file_path} is an invalid file.")
     except IsADirectoryError:

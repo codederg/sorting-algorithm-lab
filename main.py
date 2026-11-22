@@ -81,14 +81,12 @@ def display_commands() -> None:
     print("(3) Load json result file.")
     print("(0) Exit")
 
-def prompt_for_positive_number(prompt: str) -> int:
+def prompt_for_positive_number(prompt: str, allow_zero: bool = True) -> int:
     """Prompt the user for a positive integer.
 
     Args:
         prompt (str): The text prompt displayed to the user.
-
-    Raises:
-        NegativeNumberError: If selected number is negative.
+        allow_zero (bool): Whether 0 is a valid input.
 
     Returns:
         int: The positive number.
@@ -99,9 +97,10 @@ def prompt_for_positive_number(prompt: str) -> int:
             number: int = int(input(prompt))
             if number < 0:
                 raise NegativeNumberError()
-            
+            if not allow_zero and number == 0:
+                raise ValueError()
         except ValueError:
-            print("Please input a number.")
+            print("Please input a valid number.")
         except NegativeNumberError:
             print("Please input a positive number.")
         else:
@@ -172,9 +171,9 @@ def prompt_for_range() -> tuple[int, int]:
 def scaled_test() -> None:
     """Test different algorithms with scaling (increasing) data set lengths."""
     # Let the user determine the characteristics of the data sets.
-    amount_of_sets = prompt_for_positive_number("Amount of data sets: ")
+    amount_of_sets = prompt_for_positive_number("Amount of data sets: ", False)
     start_length = prompt_for_positive_number("Start length: ")
-    delta_length = prompt_for_positive_number("Net length increase for each data set: ")
+    delta_length = prompt_for_positive_number("Net length increase for each data set: ", False)
 
     # Let the user choose the data generation algorithm.
     generation_name, additional_arguments = choose_generation_method()
@@ -196,7 +195,7 @@ def scaled_test() -> None:
             results[name].append(benchmark_multiple(algorithm, data_set, AMOUNT_OF_TRIALS))
 
     save_scaling_benchmark(lengths, results, generation_name)
-    visualize_scaled_test(lengths, results)
+    visualize_scaled_test(lengths, results, generation_name)
     
 def algorithm_test() -> None:
     """Test different algorithms with the same data set."""
@@ -212,7 +211,7 @@ def algorithm_test() -> None:
         results[name] = result
 
     save_comparison_benchmark(results, length, generation_name)
-    visualize_algorithm_test(results)
+    visualize_algorithm_test(results, generation_name)
 
 def display_sorting_options() -> None:
     """Display sorting algorithm options."""
