@@ -60,7 +60,7 @@ def display_commands() -> None:
     print("Commands:")
     print("(1) Test the same algorithm with different data set lengths.")
     print("(2) Test different algorithms with the same data set.")
-    print("(3) Load csv result file.")
+    print("(3) Load json result file.")
     print("(0) Exit")
 
 def prompt_for_positive_number(prompt: str) -> int:
