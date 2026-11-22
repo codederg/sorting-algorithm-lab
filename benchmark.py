@@ -1,7 +1,7 @@
 from __future__ import annotations
 import time
 from collections.abc import Callable
-from statistics import mean, median, stdev, variance, quantiles
+from statistics import mean, median
 
 AMOUNT_OF_TRIALS = 10
 
