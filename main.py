@@ -2,11 +2,12 @@ from __future__ import annotations
 import random
 import os
 import subprocess
-from generate_data import generate_random, GenerationMethod, GENERATION_FUNCTIONS
-from sorts import SORTING_ALGORITHMS
+
 from benchmark import benchmark_multiple, BenchmarkResults, AMOUNT_OF_TRIALS
-from visualization import visualize_algorithm_test, visualize_scaled_test
+from generate_data import generate_random, GenerationMethod, GENERATION_FUNCTIONS
 from saving import save_comparison_benchmark, save_scaling_benchmark, prompt_load
+from sorts import SORTING_ALGORITHMS
+from visualization import visualize_algorithm_test, visualize_scaled_test
 
 DEFAULT_GENERATION_LENGTH: int = 50
 
