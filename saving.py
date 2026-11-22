@@ -10,34 +10,45 @@ COMPARISON_DIRECTORY = Path(__file__).resolve().parent / "results" / "comparison
 SCALED_DIRECTORY = Path(__file__).resolve().parent / "results" / "scaled"
 
 def prompt_load() -> None:
+
     raw_path = questionary.path("Select a file to load: ", default = "./results/").ask()
 
     if not raw_path:
         return
+    
     file_path = Path(raw_path).resolve()
 
-    with file_path.open("r", newline = "", encoding = "utf-8") as file:
-        data = json.load(file)
+    try:
+        with file_path.open("r", newline = "", encoding = "utf-8") as file:
+            data = json.load(file)
 
-        test_type: str = data["test_type"]
+            test_type: str = data["test_type"]
 
-        if test_type == "Comparison":
-            results: dict[str, BenchmarkResults] = {}
-            for name in SORTING_ALGORITHMS.keys():
-                times = data[name]
-                results[name] = BenchmarkResults(times)
-            visualize_algorithm_test(results)
-        elif test_type == "Scaling":
+            if test_type == "Comparison":
+                results: dict[str, BenchmarkResults] = {}
+                for name in SORTING_ALGORITHMS.keys():
+                    times = data[name]
+                    results[name] = BenchmarkResults(times)
+                visualize_algorithm_test(results)
+            elif test_type == "Scaling":
 
-            lengths = []
-            results: dict[str, list[BenchmarkResults]] = {}
-            for length, algorithm_data in data["lengths"].items():
-                lengths.append(int(length))
-                for algorithm, times in algorithm_data.items():
-                    l = results[algorithm] = results.get(algorithm, [])
-                    l.append(BenchmarkResults(times))
+                lengths = []
+                results: dict[str, list[BenchmarkResults]] = {}
+                for length, algorithm_data in data["lengths"].items():
+                    lengths.append(int(length))
+                    for algorithm, times in algorithm_data.items():
+                        l = results[algorithm] = results.get(algorithm, [])
+                        l.append(BenchmarkResults(times))
 
-            visualize_scaled_test(lengths, results)
+                visualize_scaled_test(lengths, results)
+            else:
+                input(f"{file_path} is an invalid file.")
+    except IsADirectoryError:
+        input(f"{file_path} is a directory. Please select a valid .json file.")
+    except FileNotFoundError:
+        input(f"{file_path} does not exist. Please select a valid .json file.")
+    except Exception as e:
+        input(f"An error was found: {e}")
 
 def save_scaling_benchmark(lengths: list[int], results: dict[str, list[BenchmarkResults]], data_generation_name: str) -> None:
 
