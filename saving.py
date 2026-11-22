@@ -31,20 +31,18 @@ def prompt_load() -> None:
 
 def save_scaling_benchmark(lengths: list[int], results: dict[str, list[BenchmarkResults]], data_generation_name: str) -> None:
 
-    print(lengths)
-
     now = datetime.now()
     timestamp = now.strftime("%Y-%m-%d")
     file_name = f"{data_generation_name.lower().replace(" ", "_")}_{timestamp}.json"
 
     # Create data to be saved.
     data = {}
-    for name, result in results.items():
 
-        data[name] = {}
-        
-        for i, length in enumerate(lengths):
-            data[name][length] = result[i].data
+    data["lengths"] = {}
+    for i, length in enumerate(lengths):
+        l = data["lengths"][length] = {}
+        for name, result in results.items():
+            l[name] = result[i].data
 
     data["test_type"] = "Scaling"
     data["data_generation"] = data_generation_name
