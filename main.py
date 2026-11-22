@@ -196,7 +196,7 @@ def scaled_test() -> None:
             results[name].append(benchmark_multiple(algorithm, data_set, AMOUNT_OF_TRIALS))
 
     save_scaling_benchmark(lengths, results, generation_name)
-    visualize_scaled_test(lengths, results)
+    visualize_scaled_test(lengths, results, generation_name)
     
 def algorithm_test() -> None:
     """Test different algorithms with the same data set."""
@@ -212,7 +212,7 @@ def algorithm_test() -> None:
         results[name] = result
 
     save_comparison_benchmark(results, length, generation_name)
-    visualize_algorithm_test(results)
+    visualize_algorithm_test(results, generation_name)
 
 def display_sorting_options() -> None:
     """Display sorting algorithm options."""

@@ -3,7 +3,7 @@ matplotlib.use("QtAgg")  # Must be called before importing pyplot.
 import matplotlib.pyplot as plt
 from benchmark import BenchmarkResults
 
-def visualize_scaled_test(lengths: list[int], data: dict[str, list[BenchmarkResults]]) -> None:
+def visualize_scaled_test(lengths: list[int], data: dict[str, list[BenchmarkResults]], generation_method_name: str) -> None:
     """Displays the time taken for different sorting algorithms with increasing lengths of data sets.
 
     Displays a line graph to indicate the time taken in ms for each sorting algorithm.
@@ -20,14 +20,14 @@ def visualize_scaled_test(lengths: list[int], data: dict[str, list[BenchmarkResu
         y = [i.median for i in results]
         plt.plot(lengths, y, label = algorithm_name)
 
-    plt.title(f"Scaling data set lengths")
+    plt.title(f"Scaling data set lengths with {generation_method_name.lower()} data")
     plt.xlabel("Length of data set")
     plt.ylabel("Median Time Taken (ms)")
 
     plt.legend()
     plt.show()
 
-def visualize_algorithm_test(results: dict[str, BenchmarkResults]) -> None:
+def visualize_algorithm_test(results: dict[str, BenchmarkResults], generation_method_name: str) -> None:
     """Display time taken for different sorting algorithms.
 
     Displays a bar chart to indicate the differences in ms of each sorting algorithm.
@@ -47,7 +47,7 @@ def visualize_algorithm_test(results: dict[str, BenchmarkResults]) -> None:
     fig, ax = plt.subplots()
     bars = ax.bar(categories, values, color = "steelblue", width = 0.5)
 
-    ax.set_title("Algorithm Lab")
+    ax.set_title(f"Different algorithm times with {generation_method_name.lower()} data")
     ax.set_xlabel("Sorting Algorithm")
     ax.set_ylabel("Median Time Taken (ms)")
 
