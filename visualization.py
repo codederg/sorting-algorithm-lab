@@ -1,4 +1,3 @@
-from collections.abc import Callable
 import matplotlib
 matplotlib.use("QtAgg")  # Must be called before importing pyplot.
 import matplotlib.pyplot as plt
