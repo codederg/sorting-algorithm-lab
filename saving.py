@@ -2,7 +2,7 @@ import json
 import questionary
 from pathlib import Path
 from datetime import datetime
-from visualization import visualize_algorithm_test
+from visualization import visualize_algorithm_test, visualize_scaled_test
 from benchmark import BenchmarkResults
 from sorts import SORTING_ALGORITHMS
 
@@ -22,12 +22,22 @@ def prompt_load() -> None:
         test_type: str = data["test_type"]
 
         if test_type == "Comparison":
-
             results: dict[str, BenchmarkResults] = {}
             for name in SORTING_ALGORITHMS.keys():
                 times = data[name]
                 results[name] = BenchmarkResults(times)
             visualize_algorithm_test(results)
+        elif test_type == "Scaling":
+
+            lengths = []
+            results: dict[str, list[BenchmarkResults]] = {}
+            for length, algorithm_data in data["lengths"].items():
+                lengths.append(int(length))
+                for algorithm, times in algorithm_data.items():
+                    l = results[algorithm] = results.get(algorithm, [])
+                    l.append(BenchmarkResults(times))
+
+            visualize_scaled_test(lengths, results)
 
 def save_scaling_benchmark(lengths: list[int], results: dict[str, list[BenchmarkResults]], data_generation_name: str) -> None:
 
