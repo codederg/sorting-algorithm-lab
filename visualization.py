@@ -40,6 +40,10 @@ def visualize_algorithm_test(results: dict[str, BenchmarkResults]) -> None:
     categories = results.keys()
     values = [i.median for i in results.values()]
 
+    # Sort data into descending order.
+    sorted_pairs = sorted(zip(values, categories), reverse = True)
+    values, categories = zip(*sorted_pairs)
+
     fig, ax = plt.subplots()
     bars = ax.bar(categories, values, color = "steelblue", width = 0.5)
 
