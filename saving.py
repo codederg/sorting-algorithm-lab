@@ -35,45 +35,37 @@ def save_scaling_benchmark(lengths: list[int], results: dict[str, list[Benchmark
 
     now = datetime.now()
     timestamp = now.strftime("%Y-%m-%d")
-    file_name = f"{data_generation_name.lower().replace(" ", "_")}_{timestamp}.csv"
+    file_name = f"{data_generation_name.lower().replace(" ", "_")}_{timestamp}.json"
 
-    data = []
-    field_names = ["algorithm", "lengths", "times"]
-    # Create list of data to be saved.
+    # Create data to be saved.
+    data = {}
     for name, result in results.items():
 
-        sub_data = {}
-        sub_data["algorithm"] = name
-        sub_data["times"] = {}
+        data[name] = {}
         
         for i, length in enumerate(lengths):
-            benchmarks = result[i]
-            times = benchmarks.data
+            data[name][length] = result[i].data
 
-            l = sub_data["times"][str(length)] = []
-            l.append(times)
-
-        data.append(sub_data)
-
-    print(data)
+    data["test_type"] = "Scaling"
+    data["data_generation"] = data_generation_name
 
     with (SCALED_DIRECTORY / file_name).open("w", newline = "", encoding = "utf-8") as file:
-        file.write("scaled\n")
+        json.dump(data, file, indent = 2)
 
-        writer = csv.DictWriter(file, fieldnames = field_names)
-        writer.writeheader()
-        writer.writerows(data)
-
-def save_comparison_benchmark(results: dict[str, BenchmarkResults], data_generation_name: str):
+def save_comparison_benchmark(results: dict[str, BenchmarkResults], length: int, data_generation_name: str):
 
     now = datetime.now()
     timestamp = now.strftime("%Y-%m-%d")
-    file_name = f"{data_generation_name.lower().replace(" ", "_")}_{timestamp}.csv"
+    file_name = f"{data_generation_name.lower().replace(" ", "_")}_{timestamp}.json"
 
-    data = [r.data for r in results.values()]
+    # Create data to be saved
+    data = {}
+    for name, result in results.items():
+        data[name] = result.data
+
+    data["test_type"] = "Comparison"
+    data["data_generation"] = data_generation_name
+    data["length"] = length
 
     with (COMPARISON_DIRECTORY / file_name).open("w", newline = "", encoding = "utf-8") as file:
-        file.write("comparison\n")
-
-        writer = csv.writer(file)
-        writer.writerows(data)
+        json.dump(data, file, indent = 2)

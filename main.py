@@ -165,7 +165,7 @@ def algorithm_test() -> None:
         result = benchmark_multiple(sort, data_set, AMOUNT_OF_TRIALS)
         results[name] = result
 
-    save_comparison_benchmark(results, generation_name)
+    save_comparison_benchmark(results, length, generation_name)
     visualize_algorithm_test(results)
 
 def display_sorting_options() -> None:
