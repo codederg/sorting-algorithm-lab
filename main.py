@@ -14,10 +14,17 @@ class NegativeNumberError(Exception):
     pass
 
 def clear_terminal() -> None:
+    """Clears the terminal."""
     subprocess.run(["cls" if os.name == "nt" else "clear"])
 
 def choose_generation_method() -> tuple[str, list[any] | None]:
+    """Prompts the user to choose a generation method for a data set.
 
+    Returns:
+        tuple[str, list[any] | None]: A tuple containing:
+            - data_generation_name (str): The name of the chosen data generation method.
+            - additional_arguments (list[any] | None, optional): Additional arguments needed to generate the data set.
+    """
     while True:
         clear_terminal()
         display_generation_methods()
@@ -42,13 +49,23 @@ def choose_generation_method() -> tuple[str, list[any] | None]:
                 print(f"{choice} is an invalid command.")
 
 def generate_data_set(length: int, generation_algorithm: GenerationMethod, additional_arguments: list[any] | None = None) -> list[int]:
+    """Generate a data set to be sorted.
 
+    Args:
+        length (int): The length of the generated data set.
+        generation_algorithm (GenerationMethod): The algorithm used to generate the data set.
+        additional_arguments (list[any] | None, optional): Any additional arguments needed to run the algorithm. Defaults to None.
+
+    Returns:
+        list[int]: The generated data set.
+    """
     if additional_arguments is None:
         return generation_algorithm(length)
     else:
         return generation_algorithm(length, *additional_arguments)
 
 def display_generation_methods() -> None:
+    """Display different generation command settings."""
     print("Select a way to generate data:")
     print("(1) Random")
     print("(2) Sorted")
@@ -57,6 +74,7 @@ def display_generation_methods() -> None:
     print("(0) Return")
 
 def display_commands() -> None:
+    """Display program commands."""
     print("Commands:")
     print("(1) Test the same algorithm with different data set lengths.")
     print("(2) Test different algorithms with the same data set.")
@@ -64,6 +82,17 @@ def display_commands() -> None:
     print("(0) Exit")
 
 def prompt_for_positive_number(prompt: str) -> int:
+    """Prompt the user for a positive integer.
+
+    Args:
+        prompt (str): The text prompt displayed to the user.
+
+    Raises:
+        NegativeNumberError: If selected number is negative.
+
+    Returns:
+        int: The positive number.
+    """
     clear_terminal()
     while True:
         try:
@@ -81,6 +110,16 @@ def prompt_for_positive_number(prompt: str) -> int:
     return number
 
 def prompt_for_random_instance() -> random.Random:
+    """Prompt the user for a seed to create a valid random instance.
+
+    This function prompts the user to create a random.Random instance.
+    The user is prompted for a seed in the form of an integer for 
+    simplicity. Note that if the user uses a blank seed, they will
+    get a random seed.
+
+    Returns:
+        random.Random: The random instance used for random generation.
+    """
     clear_terminal()
     while True:
         try:
@@ -98,6 +137,13 @@ def prompt_for_random_instance() -> random.Random:
     return random_instance
 
 def prompt_for_range() -> tuple[int, int]:
+    """Prompt the user for a minimum and maximum value.
+
+    Returns:
+        tuple[int, int]: A tuple containing:
+            minimum (int): The selected minimum value.
+            maximum (int): The selected maximum value.
+    """
     clear_terminal()
 
     # Prompt user for a valid minimum value.
@@ -124,7 +170,7 @@ def prompt_for_range() -> tuple[int, int]:
     return min_value, max_value
 
 def scaled_test() -> None:
-
+    """Test different algorithms with scaling (increasing) data set lengths."""
     # Let the user determine the characteristics of the data sets.
     amount_of_sets = prompt_for_positive_number("Amount of data sets: ")
     start_length = prompt_for_positive_number("Start length: ")
@@ -153,7 +199,7 @@ def scaled_test() -> None:
     visualize_scaled_test(lengths, results)
     
 def algorithm_test() -> None:
-
+    """Test different algorithms with the same data set."""
     length = prompt_for_positive_number("Length: ")
     generation_name, additional_arguments = choose_generation_method()
 
@@ -169,6 +215,7 @@ def algorithm_test() -> None:
     visualize_algorithm_test(results)
 
 def display_sorting_options() -> None:
+    """Display sorting algorithm options."""
     print("Algorithms:")
     print("(1) Bubble sort")
     print("(2) Selection sort")
