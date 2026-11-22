@@ -6,7 +6,7 @@ from generate_data import generate_random, GenerationMethod, GENERATION_FUNCTION
 from sorts import SORTING_ALGORITHMS
 from benchmark import benchmark_multiple, BenchmarkResults, AMOUNT_OF_TRIALS
 from visualization import visualize_algorithm_test, visualize_scaled_test
-from saving import save_comparison_benchmark, prompt_load
+from saving import save_comparison_benchmark, save_scaling_benchmark, prompt_load
 
 DEFAULT_GENERATION_LENGTH: int = 50
 
@@ -149,6 +149,7 @@ def scaled_test() -> None:
         for data_set in data_sets:
             results[name].append(benchmark_multiple(algorithm, data_set, AMOUNT_OF_TRIALS))
 
+    save_scaling_benchmark(lengths, results, generation_name)
     visualize_scaled_test(lengths, results)
     
 def algorithm_test() -> None:
