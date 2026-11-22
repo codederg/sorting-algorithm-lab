@@ -1,27 +1,14 @@
 from __future__ import annotations
 import random
-from typing import Any, Protocol
-from collections.abc import Callable
 import os
 import subprocess
-from generate_data import generate_random, generate_nearly_sorted, generate_sorted, generate_reverse_sorted
-from sorts import bubble_sort, selection_sort, insertion_sort, merge_sort, quick_sort
-from benchmark import benchmark_multiple, BenchmarkResults
+from generate_data import generate_random, GenerationMethod, GENERATION_FUNCTIONS
+from sorts import SORTING_ALGORITHMS
+from benchmark import benchmark_multiple, BenchmarkResults, AMOUNT_OF_TRIALS
 from visualization import visualize_algorithm_test, visualize_scaled_test
+from saving import save_comparison_benchmark, save_scaling_benchmark, prompt_load
 
 DEFAULT_GENERATION_LENGTH: int = 50
-AMOUNT_OF_TRIALS = 10
-SORTING_ALGORITHMS: dict[str, Callable[[list[int]], list[int]]] = {  # {name: sort_function}
-    "Bubble Sort": bubble_sort,
-    "Selection Sort": selection_sort,
-    "Insertion Sort": insertion_sort,
-    "Merge Sort": merge_sort,
-    "Quick Sort": quick_sort,
-}
-
-class GenerationMethod(Protocol):
-    def __call__(self, size: int, *args: Any, **kwargs: Any) -> list[int]:
-        pass
 
 class NegativeNumberError(Exception):
     pass
@@ -29,7 +16,7 @@ class NegativeNumberError(Exception):
 def clear_terminal() -> None:
     subprocess.run(["cls" if os.name == "nt" else "clear"])
 
-def choose_generation_method() -> tuple[GenerationMethod, list[any] | None]:
+def choose_generation_method() -> tuple[str, list[any] | None]:
 
     while True:
         clear_terminal()
@@ -42,15 +29,15 @@ def choose_generation_method() -> tuple[GenerationMethod, list[any] | None]:
             case "1":  # Generate random.
                 min_value, max_value = prompt_for_range()
                 random_instance = prompt_for_random_instance()
-                return generate_random, (random_instance, min_value, max_value)
+                return "Random", (random_instance, min_value, max_value)
             case "2":  # Generate sorted.
-                return generate_sorted, None
+                return "Sorted", None
             case "3":  # Generate reverse sorted.
-                return generate_reverse_sorted, None
+                return "Reverse Sorted", None
             case "4":  # Generate nearly sorted.
                 swaps: int = prompt_for_positive_number("Amount of random swaps: ")
                 random_instance = prompt_for_random_instance()
-                return generate_nearly_sorted, (random_instance, swaps)
+                return "Nearly Sorted", (random_instance, swaps)
             case _:
                 print(f"{choice} is an invalid command.")
 
@@ -73,6 +60,7 @@ def display_commands() -> None:
     print("Commands:")
     print("(1) Test the same algorithm with different data set lengths.")
     print("(2) Test different algorithms with the same data set.")
+    print("(3) Load json result file.")
     print("(0) Exit")
 
 def prompt_for_positive_number(prompt: str) -> int:
@@ -143,14 +131,14 @@ def scaled_test() -> None:
     delta_length = prompt_for_positive_number("Net length increase for each data set: ")
 
     # Let the user choose the data generation algorithm.
-    generation_method, additional_arguments = choose_generation_method()
+    generation_name, additional_arguments = choose_generation_method()
 
     # Generate the data sets.
     data_sets: list[int] = []
     lengths: list[int] = []
     for i in range(amount_of_sets):
         length = start_length + delta_length * i
-        data_set = generate_data_set(length, generation_method, additional_arguments)
+        data_set = generate_data_set(length, GENERATION_FUNCTIONS[generation_name], additional_arguments)
         lengths.append(length)
         data_sets.append(data_set)
 
@@ -161,14 +149,15 @@ def scaled_test() -> None:
         for data_set in data_sets:
             results[name].append(benchmark_multiple(algorithm, data_set, AMOUNT_OF_TRIALS))
 
+    save_scaling_benchmark(lengths, results, generation_name)
     visualize_scaled_test(lengths, results)
     
 def algorithm_test() -> None:
 
     length = prompt_for_positive_number("Length: ")
-    generation_method, additional_arguments = choose_generation_method()
+    generation_name, additional_arguments = choose_generation_method()
 
-    data_set = generate_data_set(length, generation_method, additional_arguments)
+    data_set = generate_data_set(length, GENERATION_FUNCTIONS[generation_name], additional_arguments)
 
     results: dict[str, BenchmarkResults] = {}
 
@@ -176,6 +165,7 @@ def algorithm_test() -> None:
         result = benchmark_multiple(sort, data_set, AMOUNT_OF_TRIALS)
         results[name] = result
 
+    save_comparison_benchmark(results, length, generation_name)
     visualize_algorithm_test(results)
 
 def display_sorting_options() -> None:
@@ -206,6 +196,8 @@ def main() -> None:
                 scaled_test()
             case "2":
                 algorithm_test()
+            case "3":
+                prompt_load()
             case _:
                 print(f"{choice} is an invalid command.")
 

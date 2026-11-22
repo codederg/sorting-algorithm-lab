@@ -3,6 +3,8 @@ import time
 from collections.abc import Callable
 from statistics import mean, median, stdev, variance, quantiles
 
+AMOUNT_OF_TRIALS = 10
+
 class BenchmarkResults():
     """Represents the results of a trialed benchmark.
 
