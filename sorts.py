@@ -1,4 +1,5 @@
 import random
+from collections.abc import Callable
 
 def bubble_sort(items: list[int]) -> list[int]:
     """Sort a list in ascending order using the bubble sort algorithm.
@@ -9,9 +10,6 @@ def bubble_sort(items: list[int]) -> list[int]:
     Returns:
         list[int]: The sorted list in ascending order.
     """
-
-    # Create a shallow copy to prevent modifying the original list.
-    items = items.copy()
 
     n = len(items)
 
@@ -32,8 +30,6 @@ def insertion_sort(items: list[int]) -> list[int]:
     Returns:
         list[int]: The sorted list in ascending order.
     """
-    # Create a shallow copy to prevent modifying the original list.
-    items = items.copy()
 
     # Start at the second index
     for i in range(1, len(items)):
@@ -59,9 +55,6 @@ def selection_sort(items: list[int]) -> list[int]:
     Returns:
         list[int]: The sorted list in ascending order.
     """
-    
-    # Create a shallow copy to prevent modifying the original list.
-    items = items.copy()
 
     n = len(items)
 
@@ -192,3 +185,11 @@ def partition(items: list[int], low: int, high: int) -> int:
 
     items[i + 1], items[high] = items[high], items[i + 1]
     return i + 1
+
+SORTING_ALGORITHMS: dict[str, Callable[[list[int]], list[int]]] = {
+    "Bubble Sort": bubble_sort,
+    "Selection Sort": selection_sort,
+    "Insertion Sort": insertion_sort,
+    "Merge Sort": merge_sort,
+    "Quick Sort": quick_sort,
+}

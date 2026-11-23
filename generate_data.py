@@ -1,6 +1,12 @@
+from __future__ import annotations
 import random
+from typing import Any, Protocol
 
-def generate_random(size: int, rng: random.Random, min_value: int = 0, max_value: int = 1000) -> list[int]:
+class GenerationMethod(Protocol):
+    def __call__(self, size: int, *args: Any, **kwargs: Any) -> list[int]:
+        pass
+
+def generate_random(size: int, rng: random.Random, min_value: int = 0, max_value: int = 10000) -> list[int]:
     """Generates a list of randomized values.
 
     Args:
@@ -83,9 +89,20 @@ def generate_nearly_sorted(size: int, rng: random.Random, swaps: int = 3) -> lis
 
     data: list[int] = generate_sorted(size)
 
+    # If no dataset is generated, return an empty one without swaps.
+    if not data:
+        return []
+
     for _ in range(swaps):
         i = rng.randrange(size)
         j = rng.randrange(size)
         data[i], data[j] = data[j], data[i]
 
     return data
+
+GENERATION_FUNCTIONS: dict[str, GenerationMethod] = {
+    "Random": generate_random,
+    "Nearly Sorted": generate_nearly_sorted,
+    "Sorted": generate_sorted,
+    "Reverse Sorted": generate_reverse_sorted
+}
