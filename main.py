@@ -62,7 +62,10 @@ def generate_data_set(length: int, generation_algorithm: GenerationMethod, addit
     if additional_arguments is None:
         return generation_algorithm(length)
     else:
-        return generation_algorithm(length, *additional_arguments)
+        if isinstance(additional_arguments, list):
+            return generation_algorithm(length, *additional_arguments)
+        else:
+            return generation_algorithm(length, additional_arguments)
 
 def display_generation_methods() -> None:
     """Display different generation command settings."""
