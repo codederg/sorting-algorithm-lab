@@ -76,8 +76,8 @@ def display_generation_methods() -> None:
 def display_commands() -> None:
     """Display program commands."""
     print("Commands:")
-    print("(1) Test the same algorithm with different data set lengths.")
-    print("(2) Test different algorithms with the same data set.")
+    print("(1) Test with scaling data set lengths.")
+    print("(2) Test with the same data set.")
     print("(3) Load json result file.")
     print("(0) Exit")
 

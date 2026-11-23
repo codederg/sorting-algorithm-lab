@@ -1,10 +1,12 @@
 import json
-import questionary
 from pathlib import Path
 from datetime import datetime
-from visualization import visualize_algorithm_test, visualize_scaled_test
+
+import questionary
+
 from benchmark import BenchmarkResults
 from sorts import SORTING_ALGORITHMS
+from visualization import visualize_algorithm_test, visualize_scaled_test
 
 COMPARISON_DIRECTORY = Path(__file__).resolve().parent / "results" / "comparison"
 SCALED_DIRECTORY = Path(__file__).resolve().parent / "results" / "scaled"
