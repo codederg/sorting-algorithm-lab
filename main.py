@@ -32,8 +32,6 @@ def choose_generation_method() -> tuple[str, list[any] | None]:
         choice: str = input("Generate: ")
         
         match choice:
-            case "0":  # Return
-                break
             case "1":  # Generate random.
                 random_instance = prompt_for_random_instance()
                 return "Random", (random_instance)
@@ -74,7 +72,6 @@ def display_generation_methods() -> None:
     print("(2) Sorted")
     print("(3) Reverse Sorted")
     print("(4) Nearly Sorted")
-    print("(0) Return")
 
 def display_commands() -> None:
     """Display program commands."""
