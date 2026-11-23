@@ -62,7 +62,7 @@ def generate_dataset(length: int, generation_algorithm: GenerationMethod, additi
     if additional_arguments is None:
         return generation_algorithm(length)
     else:
-        if isinstance(additional_arguments, list):
+        if isinstance(additional_arguments, tuple):
             return generation_algorithm(length, *additional_arguments)
         else:
             return generation_algorithm(length, additional_arguments)
