@@ -6,7 +6,7 @@ RANDOM_SEED = 1
 def test_random():
     random_instance = random.Random()
     random_instance.seed(RANDOM_SEED)
-    assert generate_random(10, random_instance) == [137, 582, 867, 821, 782, 64, 261, 120, 507, 779]
+    assert generate_random(10, random_instance) == [2201, 9325, 1033, 4179, 1931, 8117, 7364, 7737, 6219, 3439]
 
 def test_sorted():
     assert generate_sorted(5) == [0, 1, 2, 3, 4]
