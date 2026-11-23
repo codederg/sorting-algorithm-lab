@@ -57,7 +57,7 @@ def save_scaling_benchmark(lengths: list[int], results: dict[str, list[Benchmark
     """Save the results from a scaling test to json.
 
     Args:
-        lengths (list[int]): The data set lengths tested with.
+        lengths (list[int]): The dataset lengths tested with.
         results (dict[str, list[BenchmarkResults]]): Result data containing:
             - algorithm_name (str): The name of the sorting algorithm.
             - benchmarks (list[BenchmarkResults]): The results from the sorting algorithm, 

@@ -19,12 +19,12 @@ def clear_terminal() -> None:
     subprocess.run(["cls" if os.name == "nt" else "clear"])
 
 def choose_generation_method() -> tuple[str, list[any] | None]:
-    """Prompts the user to choose a generation method for a data set.
+    """Prompts the user to choose a generation method for a dataset.
 
     Returns:
         tuple[str, list[any] | None]: A tuple containing:
             - data_generation_name (str): The name of the chosen data generation method.
-            - additional_arguments (list[any] | None, optional): Additional arguments needed to generate the data set.
+            - additional_arguments (list[any] | None, optional): Additional arguments needed to generate the dataset.
     """
     while True:
         clear_terminal()
@@ -48,16 +48,16 @@ def choose_generation_method() -> tuple[str, list[any] | None]:
             case _:
                 print(f"{choice} is an invalid command.")
 
-def generate_data_set(length: int, generation_algorithm: GenerationMethod, additional_arguments: list[any] | None = None) -> list[int]:
-    """Generate a data set to be sorted.
+def generate_dataset(length: int, generation_algorithm: GenerationMethod, additional_arguments: list[any] | None = None) -> list[int]:
+    """Generate a dataset to be sorted.
 
     Args:
-        length (int): The length of the generated data set.
-        generation_algorithm (GenerationMethod): The algorithm used to generate the data set.
+        length (int): The length of the generated dataset.
+        generation_algorithm (GenerationMethod): The algorithm used to generate the dataset.
         additional_arguments (list[any] | None, optional): Any additional arguments needed to run the algorithm. Defaults to None.
 
     Returns:
-        list[int]: The generated data set.
+        list[int]: The generated dataset.
     """
     if additional_arguments is None:
         return generation_algorithm(length)
@@ -79,8 +79,8 @@ def display_generation_methods() -> None:
 def display_commands() -> None:
     """Display program commands."""
     print("Commands:")
-    print("(1) Test with scaling data set lengths.")
-    print("(2) Test with the same data set.")
+    print("(1) Test with scaling dataset lengths.")
+    print("(2) Test with the same dataset.")
     print("(3) Load json result file.")
     print("(0) Exit")
 
@@ -172,45 +172,45 @@ def prompt_for_range() -> tuple[int, int]:
     return min_value, max_value
 
 def scaled_test() -> None:
-    """Test different algorithms with scaling (increasing) data set lengths."""
-    # Let the user determine the characteristics of the data sets.
-    amount_of_sets = prompt_for_positive_number("Amount of data sets: ", False)
+    """Test different algorithms with scaling (increasing) dataset lengths."""
+    # Let the user determine the characteristics of the datasets.
+    amount_of_sets = prompt_for_positive_number("Amount of datasets: ", False)
     start_length = prompt_for_positive_number("Start length: ")
-    delta_length = prompt_for_positive_number("Net length increase for each data set: ", False)
+    delta_length = prompt_for_positive_number("Net length increase for each dataset: ", False)
 
     # Let the user choose the data generation algorithm.
     generation_name, additional_arguments = choose_generation_method()
 
-    # Generate the data sets.
-    data_sets: list[int] = []
+    # Generate the datasets.
+    datasets: list[int] = []
     lengths: list[int] = []
     for i in range(amount_of_sets):
         length = start_length + delta_length * i
-        data_set = generate_data_set(length, GENERATION_FUNCTIONS[generation_name], additional_arguments)
+        dataset = generate_dataset(length, GENERATION_FUNCTIONS[generation_name], additional_arguments)
         lengths.append(length)
-        data_sets.append(data_set)
+        datasets.append(dataset)
 
-    # Benchmark each algorithm with each data set and gather results.
+    # Benchmark each algorithm with each dataset and gather results.
     results: dict[str, list[BenchmarkResults]] = {}
     for name, algorithm in SORTING_ALGORITHMS.items():
         results[name] = []
-        for data_set in data_sets:
-            results[name].append(benchmark_multiple(algorithm, data_set, AMOUNT_OF_TRIALS))
+        for dataset in datasets:
+            results[name].append(benchmark_multiple(algorithm, dataset, AMOUNT_OF_TRIALS))
 
     save_scaling_benchmark(lengths, results, generation_name)
     visualize_scaled_test(lengths, results, generation_name)
     
 def algorithm_test() -> None:
-    """Test different algorithms with the same data set."""
+    """Test different algorithms with the same dataset."""
     length = prompt_for_positive_number("Length: ")
     generation_name, additional_arguments = choose_generation_method()
 
-    data_set = generate_data_set(length, GENERATION_FUNCTIONS[generation_name], additional_arguments)
+    dataset = generate_dataset(length, GENERATION_FUNCTIONS[generation_name], additional_arguments)
 
     results: dict[str, BenchmarkResults] = {}
 
     for name, sort in SORTING_ALGORITHMS.items():
-        result = benchmark_multiple(sort, data_set, AMOUNT_OF_TRIALS)
+        result = benchmark_multiple(sort, dataset, AMOUNT_OF_TRIALS)
         results[name] = result
 
     save_comparison_benchmark(results, length, generation_name)
