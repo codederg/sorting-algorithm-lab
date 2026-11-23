@@ -24,7 +24,7 @@ def choose_generation_method() -> tuple[str, list[any] | None]:
     Returns:
         tuple[str, list[any] | None]: A tuple containing:
             - data_generation_name (str): The name of the chosen data generation method.
-            - additional_arguments (list[any] | None, optional): Additional arguments needed to generate the dataset.
+            - additional_arguments (tuple[any] | None, optional): Additional arguments needed to generate the dataset.
     """
     while True:
         clear_terminal()
@@ -48,13 +48,13 @@ def choose_generation_method() -> tuple[str, list[any] | None]:
             case _:
                 print(f"{choice} is an invalid command.")
 
-def generate_dataset(length: int, generation_algorithm: GenerationMethod, additional_arguments: list[any] | None = None) -> list[int]:
+def generate_dataset(length: int, generation_algorithm: GenerationMethod, additional_arguments: tuple[any] | None = None) -> list[int]:
     """Generate a dataset to be sorted.
 
     Args:
         length (int): The length of the generated dataset.
         generation_algorithm (GenerationMethod): The algorithm used to generate the dataset.
-        additional_arguments (list[any] | None, optional): Any additional arguments needed to run the algorithm. Defaults to None.
+        additional_arguments (tuple[any] | None, optional): Any additional arguments needed to run the algorithm. Defaults to None.
 
     Returns:
         list[int]: The generated dataset.
