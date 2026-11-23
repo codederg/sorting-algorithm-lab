@@ -6,7 +6,7 @@ class GenerationMethod(Protocol):
     def __call__(self, size: int, *args: Any, **kwargs: Any) -> list[int]:
         pass
 
-def generate_random(size: int, rng: random.Random, min_value: int = 0, max_value: int = 1000) -> list[int]:
+def generate_random(size: int, rng: random.Random, min_value: int = 0, max_value: int = 10000) -> list[int]:
     """Generates a list of randomized values.
 
     Args:

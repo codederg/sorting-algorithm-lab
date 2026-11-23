@@ -35,9 +35,8 @@ def choose_generation_method() -> tuple[str, list[any] | None]:
             case "0":  # Return
                 break
             case "1":  # Generate random.
-                min_value, max_value = prompt_for_range()
                 random_instance = prompt_for_random_instance()
-                return "Random", (random_instance, min_value, max_value)
+                return "Random", (random_instance)
             case "2":  # Generate sorted.
                 return "Sorted", None
             case "3":  # Generate reverse sorted.
